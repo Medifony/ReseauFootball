@@ -1,0 +1,45 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Administration des Conversations !{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-10">
+            <h1 class="my-5">Gestion des conversations</h1>
+        </div>
+        <div class="col">
+            <a href="{{ path('admin_conversations_create')}}" class="btn btn-primary my-5">Ajouter une Conversation</a>
+        </div>
+    </div>
+    
+    <table class="table table-over">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>User 1</th>
+                <th>User 2</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for conversation in conversations %}
+            <tr>
+                <td><span class="badge badge-primary rounded">{{conversation.id}}</span></td>
+                {% for participant in conversation.participants %}
+                    <td>{{participant.users.pseudo}}</td>
+                {% endfor %}
+                <td class="text-center">
+                    <a href="{{ path('admin_conversations_delete', {'id': conversation.id})}}" onclick="return confirm('Voulez-vous supprimer la conversation {{conversation.id}} ?')" class="badge badge-pill badge-danger"><i class="fas fa-trash"></i></a>
+                </td> 
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        {{ knp_pagination_render(conversations) }}
+    </div>
+</div>
+{% endblock %}

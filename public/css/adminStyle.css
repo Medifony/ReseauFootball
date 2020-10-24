@@ -1,0 +1,19 @@
+.imgAdmin {
+    max-width:32px;
+    max-height:32px;
+  }
+
+  .avatarDrop {
+    max-width:24px;
+    max-height:24px;
+  }
+
+  .avProfilP{
+    max-width: 150px;
+    max-height: 150px;
+  }
+
+  .pagination{
+    display: flex;
+    justify-content: center;
+  }

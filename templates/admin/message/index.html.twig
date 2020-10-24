@@ -1,0 +1,55 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Administration des Messages !{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-10">
+            <h1 class="my-5">Gestion des messages</h1>
+        </div>
+        <div class="col">
+            <a href="{{ path('admin_messages_create')}}" class="btn btn-primary my-5">Ajouter un Message</a>
+        </div>
+    </div>
+    
+    <table class="table table-over">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Contenu</th>
+                <th>Date</th>
+                <th>User</th>
+                <th>Conversation</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for message in messages %}
+            <tr>
+                <td><span class="badge badge-primary rounded">{{message.id}}</span></td>
+                <td>{{message.contenu|length > 50 ? message.contenu|slice(0, 50) ~ '...' : message.contenu}}</td>
+                <td>{{message.findDay(message.contDate)}} {{message.findHour(message.contDate)}}</td>
+                <td>{% if message.users %}{{message.users.pseudo}}
+                    {% else %}Aucun
+                    {% endif %}    
+                </td>
+                <td>{% if message.conversations %}{{message.conversations.id}}
+                    {% else %}Aucune
+                    {% endif %}
+                </td>
+                <td class="text-center">
+                    <a href="{{ path('admin_messages_edit', {'id': message.id})}}" class="badge badge-pill badge-primary"><i class="fas fa-edit"></i></a>
+                    <a href="{{ path('admin_messages_delete', {'id': message.id})}}" onclick="return confirm('Voulez-vous supprimer le message {{message.id}} ?')" class="badge badge-pill badge-danger"><i class="fas fa-trash"></i></a>
+                </td> 
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        {{ knp_pagination_render(messages) }}
+    </div>
+</div>
+{% endblock %}

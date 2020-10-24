@@ -1,0 +1,383 @@
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+
+search_page:
+    path: /search
+    controller: App\Controller\SearchController::index
+
+champ_page:
+    path: /{slug}
+    controller: App\Controller\ChampionnatController::index
+
+moderateur_signalement:
+    path: /moderateur/signalements
+    controller: App\Controller\ModerateurController::indexSignalement
+
+search_user:
+    path: /search/users
+    controller: App\Controller\SearchController::searchUser
+
+search_sujet:
+    path: /search/sujets
+    controller: App\Controller\SearchController::searchSujet
+
+message_page:
+    path: /account/messages
+    controller: App\Controller\AccountController::myMessages
+
+admin_signalements_index:
+    path: /admin/signalements
+    controller: App\Controller\AdminAllController::indexSignalement
+
+admin_sujets_index:
+    path: /admin/sujets
+    controller: App\Controller\AdminAllController::indexSujet
+
+admin_api_index:
+    path: /admin/api
+    controller: App\Controller\AdminReseauController::index
+
+admin_championnats_index:
+    path: /admin/championnats
+    controller: App\Controller\AdminAllController::indexChamp
+
+admin_reponses_index:
+    path: /admin/reponses
+    controller: App\Controller\AdminAllController::indexReponse
+
+admin_classements_index:
+    path: /admin/classements
+    controller: App\Controller\AdminAllController::indexClassement
+
+admin_rencontres_index:
+    path: /admin/rencontres
+    controller: App\Controller\AdminAllController::indexRencontre
+
+admin_clubs_index:
+    path: /admin/clubs
+    controller: App\Controller\AdminAllController::indexClub
+
+admin_users_index:
+    path: /admin/users
+    controller: App\Controller\AdminAllController::indexUser
+
+admin_roles_index:
+    path: /admin/roles
+    controller: App\Controller\AdminAllController::indexRole
+
+admin_messages_index:
+    path: /admin/messages
+    controller: App\Controller\AdminAllController::indexMessage
+
+admin_conversations_index:
+    path: /admin/conversations
+    controller: App\Controller\AdminAllController::indexConversation
+
+admin_pays_index:
+    path: /admin/pays
+    controller: App\Controller\AdminAllController::indexPays
+
+admin_amis_index:
+    path: /admin/amis
+    controller: App\Controller\AdminAllController::indexAmi
+
+admin_api_liga:
+    path: /admin/apiLiga
+    controller: App\Controller\AdminReseauController::apiLiga
+
+admin_api_bundesliga:
+    path: /admin/apiBundesliga
+    controller: App\Controller\AdminReseauController::apiBundesliga
+
+admin_api_seriea:
+    path: /admin/apiSerieA
+    controller: App\Controller\AdminReseauController::apiSerieA
+
+admin_api_ligue1:
+    path: /admin/apiLigue1
+    controller: App\Controller\AdminReseauController::apiLigue1
+
+admin_api_pl:
+    path: /admin/apiPremierl
+    controller: App\Controller\AdminReseauController::apiPremierl
+
+moderateur_ban_index:
+    path: /moderateur/bannissements
+    controller: App\Controller\ModerateurController::indexBanni
+
+moderateur_ban_create:
+    path: /moderateur/ban
+    controller: App\Controller\ModerateurController::createBanni
+
+user_show:
+    path: /user/{slug}
+    controller: App\Controller\UserController::index
+
+signalement_sujet:
+    path: /signaler/{slug}
+    controller: App\Controller\SignalementController::sujet
+
+sujet_champ_create:
+    path: /{slug}/sujet
+    controller: App\Controller\SujetController:creerChamp
+
+club_page:
+    path: /{slugCh}/{slugCl}
+    controller: App\Controller\ClubController::index
+
+admin_signalements_create:
+    path: /admin/signalements/new
+    controller: App\Controller\AdminSignalementController::create
+
+admin_sujets_create:
+    path: /admin/sujets/new
+    controller: App\Controller\AdminSujetController::create
+
+admin_rencontres_create:
+    path: /admin/rencontres/new
+    controller: App\Controller\AdminRencontreController::create
+
+admin_classements_create:
+    path: /admin/classements/new
+    controller: App\Controller\AdminClassementController::create
+
+admin_reponses_create:
+    path: /admin/reponses/new
+    controller: App\Controller\AdminReponseController::create
+
+admin_championnats_create:
+    path: /admin/championnats/new
+    controller: App\Controller\AdminChampionnatController::create
+
+admin_pays_create:
+    path: /admin/pays/new
+    controller: App\Controller\AdminPaysController::create
+
+admin_messages_create:
+    path: /admin/messages/new
+    controller: App\Controller\AdminMessageController::create
+
+admin_clubs_create:
+    path: /admin/clubs/new
+    controller: App\Controller\AdminClubController::create
+
+admin_demandeAmis_create:
+    path: /admin/amis/new
+    controller: App\Controller\AdminAmisController::create
+
+admin_conversations_create:
+    path: /admin/conversations/new
+    controller: App\Controller\AdminConversationController::create
+
+admin_roles_create:
+    path: /admin/roles/new
+    controller: App\Controller\AdminRoleController::create
+
+admin_api_classLiga:
+    path: /admin/apiLiga/classement
+    controller: App\Controller\AdminReseauController::ligaClassement
+
+admin_api_classPremierl:
+    path: /admin/apiPremierl/classement
+    controller: App\Controller\AdminReseauController::premierlClassement
+
+admin_api_classBundesliga:
+    path: /admin/apiBundesliga/classement
+    controller: App\Controller\AdminReseauController::bundesligaClassement
+
+admin_api_classSerieA:
+    path: /admin/apiSerieA/classement
+    controller: App\Controller\AdminReseauController::serieAClassement
+
+admin_api_classLigue1:
+    path: /admin/apiLigue1/classement
+    controller: App\Controller\AdminReseauController::ligue1Classement
+
+admin_api_jouLiga:
+    path: /admin/apiLiga/joueurs
+    controller: App\Controller\AdminReseauController::ligaJoueurs
+
+admin_api_matchLiga:
+    path: /admin/apiLiga/rencontres
+    controller: App\Controller\AdminReseauController::rencontreLiga
+
+admin_api_matchPremierl:
+    path: /admin/apiPremierl/rencontres
+    controller: App\Controller\AdminReseauController::rencontrePremierl
+
+admin_api_matchBundesliga:
+    path: /admin/apiBundesliga/rencontres
+    controller: App\Controller\AdminReseauController::rencontreBundesliga
+
+admin_api_matchSeriea:
+    path: /admin/apiSeriea/rencontres
+    controller: App\Controller\AdminReseauController::rencontreSeriea
+
+admin_api_matchLigue1:
+    path: /admin/apiLigue1/rencontres
+    controller: App\Controller\AdminReseauController::rencontreLigue1
+
+signalement_reponse:
+    path: /signaler/reponse/{id}
+    controller: App\Controller\SignalementController::reponse
+    
+user_historique:
+    path: /user/{slug}/historique
+    controller: App\Controller\UserController::historique
+    
+sujet_champ_page:
+    path: /{slugCh}/sujet/{slugSuj}
+    controller: App\Controller\SujetController::indexChamp
+
+sujet_club_create:
+    path: /{slugCh}/{slugCl}/sujet
+    controller: App\Controller\SujetController:creerClub
+
+moderateur_approve_sujet:
+    path: /moderateur/sujet/approve/{id}
+    controller: App\Controller\ModerateurController::sujetApprove
+
+moderateur_approve_reponse:
+    path: /moderateur/reponse/approve/{id}
+    controller: App\Controller\ModerateurController::reponseApprove
+
+moderateur_signalement_sujet:
+    path: /moderateur/signalements/sujet/{id}
+    controller: App\Controller\ModerateurController::sujetSignalement
+
+moderateur_signalement_reponse:
+    path: /moderateur/signalements/reponse/{id}
+    controller: App\Controller\ModerateurController::reponseSignalement
+
+account_friends_delete:
+    path: /account/friends/delete/{id}
+    controller: App\Controller\AmisController::delete
+
+moderateur_ban_delete:
+    path: /moderateur/bannissement/{user}/delete
+    controller: App\Controller\ModerateurController:deleteBanni
+
+admin_signalements_edit:
+    path: /admin/signalements/{id}/edit
+    controller: App\Controller\AdminSignalementController::edit
+
+admin_championnats_edit:
+    path: /admin/championnats/{id}/edit
+    controller: App\Controller\AdminChampionnatController::edit
+
+admin_demandeAmis_edit:
+    path: /admin/amis/{id}/edit
+    controller: App\Controller\AdminAmisController::edit
+
+admin_pays_edit:
+    path: /admin/pays/{id}/edit
+    controller: App\Controller\AdminPaysController::edit
+
+admin_reponses_edit:
+    path: /admin/reponses/{id}/edit
+    controller: App\Controller\AdminReponseController::edit
+
+admin_sujets_edit:
+    path: /admin/sujets/{id}/edit
+    controller: App\Controller\AdminSujetController::edit
+
+admin_classements_edit:
+    path: /admin/classements/{id}/edit
+    controller: App\Controller\AdminClassementController::edit
+
+admin_users_edit:
+    path: /admin/users/{id}/edit
+    controller: App\Controller\AdminUserController::edit
+
+admin_rencontres_edit:
+    path: /admin/rencontres/{id}/edit
+    controller: App\Controller\AdminRencontreController::edit
+
+moderateur_sujet_edit:
+    path: /moderateur/sujet/{id}/edit
+    controller: App\Controller\ModerateurController::editSujet
+
+moderateur_reponse_edit:
+    path: /moderateur/reponse/{id}/edit
+    controller: App\Controller\ModerateurController::editReponse
+
+admin_clubs_edit:
+    path: /admin/clubs/{id}/edit
+    controller: App\Controller\AdminClubController::edit
+
+admin_messages_edit:
+    path: /admin/messages/{id}/edit
+    controller: App\Controller\AdminMessageController::edit
+
+admin_signalements_delete:
+    path: /admin/signalements/{id}/delete
+    controller: App\Controller\AdminSignalementController::delete
+
+moderateur_sujet_delete:
+    path: /moderateur/sujet/{id}/delete
+    controller: App\Controller\ModerateurController::deleteSujet
+
+account_sujet_delete:
+    path: /account/sujet/{id}/delete
+    controller: App\Controller\AccountController::deleteSujet
+
+account_reponse_delete:
+    path: /account/reponse/{id}/delete
+    controller: App\Controller\AccountController::deleteReponse
+
+moderateur_reponse_delete:
+    path: /moderateur/reponse/{id}/delete
+    controller: App\Controller\ModerateurController::deleteReponse
+
+admin_championnats_delete:
+    path: /admin/championnats/{id}/delete
+    controller: App\Controller\AdminChampionnatController::delete
+
+admin_sujets_delete:
+    path: /admin/sujets/{id}/delete
+    controller: App\Controller\AdminSujetController::delete
+
+admin_reponses_delete:
+    path: /admin/reponses/{id}/delete
+    controller: App\Controller\AdminReponseController::delete
+
+admin_clubs_delete:
+    path: /admin/clubs/{id}/delete
+    controller: App\Controller\AdminClubController::delete
+
+admin_rencontres_delete:
+    path: /admin/rencontres/{id}/delete
+    controller: App\Controller\AdminRencontreController::delete
+
+admin_users_delete:
+    path: /admin/users/{id}/delete
+    controller: App\Controller\AdminUserController::delete
+
+admin_messages_delete:
+    path: /admin/messages/{id}/delete
+    controller: App\Controller\AdminMessageController::delete
+
+admin_conversations_delete:
+    path: /admin/conversations/{id}/delete
+    controller: App\Controller\AdminConversationController::delete
+
+admin_pays_delete:
+    path: /admin/pays/{id}/delete
+    controller: App\Controller\AdminPaysController::delete
+
+admin_amis_delete:
+    path: /admin/amis/{id}/delete
+    controller: App\Controller\AdminAmisController::delete
+
+admin_classements_delete:
+    path: /admin/classements/{id}/delete
+    controller: App\Controller\AdminClassementController::delete
+
+admin_roles_delete:
+    path: /admin/{user}/delete/{role}
+    controller: App\Controller\AdminRoleController:delete
+
+sujet_club_page:
+    path: /{slugCh}/{slugCl}/sujet/{slugSuj}
+    controller: App\Controller\SujetController:indexClub

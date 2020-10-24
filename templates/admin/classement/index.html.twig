@@ -1,0 +1,63 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Administration des Classements !{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-10">
+            <h1 class="my-5">Gestion des classements</h1>
+        </div>
+        <div class="col">
+            <a href="{{ path('admin_classements_create')}}" class="btn btn-primary my-5">Ajouter un classement</a>
+        </div>
+    </div>
+    
+    <table class="table table-over">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Championnat</th>
+                <th class="text-center">Club</th>
+                <th class="text-center">Place</th>
+                <th class="text-center">Victoires</th>
+                <th class="text-center">Nuls</th>
+                <th class="text-center">Défaites</th>
+                <th class="text-center">Points</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for classement in classements %}
+            <tr>
+                <td><span class="badge badge-primary rounded">{{classement.id}}</span></td>
+                <td>
+                    {% if classement.clubs.championnats %}{{classement.clubs.championnats.nom}}
+                    {% else %}Aucun
+                    {% endif %}
+                </td>
+                <td>
+                    {% if classement.clubs %}<img src="{{ classement.clubs.logo }}" class="imgAdmin mr-2" alt="Photo"> {{classement.clubs.nom}}
+                    {% else %}Aucun
+                    {% endif %}    
+                </td>
+                <td class="text-center">{{classement.place}}</td>
+                <td class="text-center">{{classement.victoires}}</td>
+                <td class="text-center">{{classement.nuls}}</td>
+                <td class="text-center">{{classement.defaites}}</td>
+                <td class="text-center">{{classement.points}}</td>
+                <td class="text-center">
+                    <a href="{{ path('admin_classements_edit', {'id': classement.id})}}" class="badge badge-pill badge-primary"><i class="fas fa-edit"></i></a>
+                    <a href="{{ path('admin_classements_delete', {'id': classement.id})}}" onclick="return confirm('Voulez-vous supprimer le classement {{classement.id}} ?')" class="badge badge-pill badge-danger"><i class="fas fa-trash"></i></a>
+                </td> 
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        {{ knp_pagination_render(classements) }}
+    </div>
+</div>
+{% endblock %}

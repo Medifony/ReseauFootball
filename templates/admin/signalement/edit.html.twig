@@ -1,0 +1,30 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %} Modification du signalement {{ signalement.id }} {% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <h1>Modification de la réponse {{signalement.id}}</h1>
+
+    {{ form_start(form)}}
+
+    <div class="card bg-light">
+        <div class="card-header">
+            <h4 class="card-title">Corriger le signalement ?</h4>
+        </div>
+        <div class="card-body">
+            {{form_widget(form)}}
+
+            <button type="submit" class="btn btn-primary">
+                Enregistrer les modifications
+            </button>
+        </div>
+    </div>
+
+    {{form_widget(form)}}
+
+    {{form_end(form)}}
+</div>
+
+{% endblock %}

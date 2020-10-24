@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification du profil utilisateur{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <h1>Modification du profil</h1>
+
+        {{ form_start(form) }}
+
+        <div class="row">
+            <div class="col-2">
+                {% if app.user.filename %}
+                    <img src="{{ vich_uploader_asset(app.user, 'imageFile') }}" class="avProfilP">
+                {% else %}
+                    <img src="/images/avatarVide.jpg" class="avProfilP">
+                {% endif %}
+            </div>
+            <div class="col-4"> 
+                {{ form_row(form.imageFile) }}
+            </div>
+            <div class="col-6">
+                <a href="" onClick="event.preventDefault()"><i class="fas fa-trash-alt fa-3x" id="delButton" data-slug="{{app.user.slug}}"></i></a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12"> 
+                {{ form_row(form.prenom) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12"> 
+                {{ form_row(form.nom) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12"> 
+                {{ form_row(form.email) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12"> 
+                {{ form_row(form.clubs) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12"> 
+                {{ form_row(form.payss) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12"> 
+                {{ form_row(form.presentation) }}
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+
+        {{ form_end(form) }}
+    </div>
+
+{% endblock %}
+
+{# Jquery #}
+{% block javascripts %}
+    <script>
+        $(document).ready(function(){
+            $("#delButton").click(function(event){
+                $.post("/supprimePhoto", {userId:event.target.dataset.slug}, function(data){
+                if(data)
+                {
+                    $("#delButton").attr("class", "fas fa-check")
+                    $("#delButton").text("Supprimé")
+                    $("#delButton").unbind()
+                }
+                })
+            })
+        })
+        $(document).on('change', '.custom-file-input', function () {
+            let fileName = $(this).val().replace(/\\/g, '/').replace(/.*\//, '');
+            $(this).parent('.custom-file').find('.custom-file-label').text(fileName);
+        });
+    </script>
+{% endblock %}

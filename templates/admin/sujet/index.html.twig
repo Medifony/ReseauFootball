@@ -1,0 +1,59 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Administration des Sujets !{% endblock %}
+
+{% block body %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-10">
+            <h1 class="my-5">Gestion des sujets</h1>
+        </div>
+        <div class="col">
+            <a href="{{ path('admin_sujets_create')}}" class="btn btn-primary my-5">Ajouter un sujet</a>
+        </div>
+    </div>
+    
+    <table class="table table-over">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Titre</th>
+                <th>Détails</th>
+                <th>Date</th>
+                <th>User</th>
+                <th>Championnat</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for sujet in sujets %}
+            <tr>
+                <td><span class="badge badge-primary rounded">{{sujet.id}}</span></td>
+                <td>{{sujet.titre}}</td>
+                <td>{{sujet.details|length > 50 ? sujet.details|slice(0, 50) ~ '...' : sujet.details}}</td>
+                <td>{{sujet.findDay(sujet.sujetDate)}} {{sujet.findHour(sujet.sujetDate)}}</td>
+                <td>{% if sujet.users %}{{sujet.users.pseudo}}
+                    {% else %}Aucun
+                    {% endif %}
+                </td>
+                <td>{% if sujet.championnats %}{{sujet.championnats.nom}}
+                    {% else %}Aucun
+                    {% endif %}
+                </td>
+                <td class="text-center">
+                    <a href="{{ path('admin_sujets_edit', {'id': sujet.id})}}" class="badge badge-pill badge-primary"><i class="fas fa-edit"></i></a>
+                    <a href="{{ path('admin_sujets_delete', {'id': sujet.id})}}" onclick="return confirm('Voulez-vous supprimer le sujet {{sujet.id}} ?')" class="badge badge-pill badge-danger"><i class="fas fa-trash"></i></a>
+                </td> 
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        {{ knp_pagination_render(sujets) }}
+    </div>
+</div>
+
+{% endblock %}

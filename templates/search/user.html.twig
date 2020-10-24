@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rechercher un Utilisateur ou un Sujet{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="text-center" style="margin-top:10px; background-color: azure;
+  border-style: outset;">Utilisateurs trouvés.</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2">
+        </div>
+        <div class="col-8">
+        <h3>{% if info %}{{info}}{% endif %}</h3>
+        {% if users is null or users is empty %}
+            <h1 class="text-center" style="margin-top:50px; background-color: azure">Aucun résultat pour votre recherche.</h1>
+        {% else %}
+            <table class="table">
+                <tbody>
+                    {% set col = 0 %}
+                    {% for user in users %}
+                        <tr {% if  col  is divisible by(2) %}style="background-color: azure"{% endif %}>
+                            <td rowspan=2 style="vertical-align : middle;text-align:center;">
+                                {% if user.filename %}
+                                    <img src="{{ vich_uploader_asset(user, 'imageFile') }}" class="avatarSujMin">
+                                {% else %}
+                                    <img src="/images/avatarVide.jpg" class="avatarSujMin">
+                                {% endif %}
+                            </td>
+                            <td><a href="{{ path ('user_show', {'slug' : user.slug}) }}"><strong>{{user.pseudo}}</strong></a></td>
+                            <td rowspan=2 style="vertical-align : middle;text-align:center;">{% if user.clubs %}<img src="{{user.clubs.logo}}" class="logProfilP" alt="Logo">
+                            {% else %}<i class="fas fa-times"></i>{% endif %}
+                                <br><br>{% if user.payss %}<img src="https://www.countryflags.io/{{user.payss.alpha2}}/flat/24.png">{% else %}<i class="fas fa-times"></i>{% endif %}
+                            </td>
+                        </tr>
+                        <tr {% if  col  is divisible by(2) %}style="background-color: azure"{% endif %}>
+                            <td style="word-break:break-word">{{user.presentation }}</td>
+                        </tr>
+                        {% set col = col + 1 %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+        </div>
+        <div class="col-2">
+        </div>
+        </div>
+    </div>
+
+{% endblock %}

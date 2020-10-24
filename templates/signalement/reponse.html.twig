@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Signaler un contenu.{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <h1 class="text-center" style="margin-top:10px; background-color: azure; border-style: outset;">Signaler un contenu:</h1>
+
+        <div class="row">
+            <div class="col-2">
+            </div>
+            <div class="col-8">
+                <table class="table" border=1>
+                        <tbody>
+                            <tr>
+                                <td class="text-center" width=15%>
+                                {% if reponse.users %}
+                                    {% if reponse.users.filename %}
+                                        <img src="{{ vich_uploader_asset(reponse.users, 'imageFile') }}" class="avatarSujMin">
+                                    {% else %}
+                                        <img src="/images/avatarVide.jpg" class="avatarSujMin">
+                                    {% endif %}
+                                {% else %}
+                                    <img src="/images/avatarVide.jpg" class="avatarSujMin">
+                                {% endif %}
+                                </td>
+                                <td>
+                                {% if reponse.users %}<a href="{{ path ('user_show', {'slug' : reponse.users.slug}) }}"><strong>{{reponse.users.pseudo}}</strong></a>
+                                {% else %}
+                                    <strong><i>Utilisateur supprimé</i></strong>
+                                {% endif %}
+                                {% if reponse.users %}
+                                <br><br>{% if reponse.users.clubs.logo is defined %}<img src="{{reponse.users.clubs.logo}}" class="logoPreviSuj" alt="Logo"> <span class="clubPays">{{ reponse.users.clubs.navbar }}</span>{% endif %} - 
+                                {% if reponse.users.payss.alpha2 is defined %}<img src="https://www.countryflags.io/{{reponse.users.payss.alpha2}}/flat/16.png"> <span class="clubPays">{{ reponse.users.payss.nomFr }}</span>{% endif %}
+                                {% endif %}
+                                </td> 
+                            </tr>
+                            <tr>
+                                <td class="text-center"><i>{{reponse.findDay(reponse.repDate)}}</i><br><i>{{reponse.findHour(reponse.repDate)}}</i></td>
+                                <td colspan=4 style="word-break:break-word">{{reponse.commentaire | nl2br}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                {{ form_start(form) }}
+
+                {{ form_widget(form) }}
+
+                <button type="submit" class="btn btn-danger">Signaler le sujet</button>
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

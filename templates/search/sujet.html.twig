@@ -1,0 +1,112 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rechercher un Utilisateur ou un Sujet{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="text-center" style="margin-top:10px; background-color: azure;
+  border-style: outset;">Sujets trouvés.</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2">
+        </div>
+        <div class="col-8">
+        <h3>{% if info %}{{info}}{% endif %}</h3>
+        {% if sujets is null or sujets is empty %}
+            <h1 class="text-center" style="margin-top:50px;">Aucun résultat pour votre recherche.</h1>
+        {% else %}
+            {% for sujet in sujets %}
+                {% if sujet.championnats %}
+                {% if sujet.clubs %}
+                    <a href="{{ path ('sujet_club_page', {'slugCh' : sujet.championnats.slug, 'slugCl' : sujet.clubs.slug, 'slugSuj' : sujet.slug}) }}" class="previSujet">
+                    <table class="table previSujet" border=1>
+                        <tbody>
+                            <tr>
+                                <th colspan=3 class="text-center">
+                                    <img src="{{sujet.clubs.logo}}" class="logoPreviSuj" alt="Logo"> {{sujet.clubs.navbar}}
+                                </th>
+                            </tr>
+                            <tr>
+                                <td rowspan=2 class="text-center" width=15%>
+                                    {% if sujet.users %}
+                                        {% if sujet.users.filename %}
+                                            <img src="{{ vich_uploader_asset(sujet.users, 'imageFile') }}" class="avatarSujMin">
+                                        {% else %}
+                                            <img src="/images/avatarVide.jpg" class="avatarSujMin">
+                                        {% endif %}
+                                    {% else %}
+                                        <img src="/images/avatarVide.jpg" class="avatarSujMin">
+                                    {% endif %}
+                                </td>
+                                <td>{% if sujet.users %}<strong>{{sujet.users.pseudo}}</strong>{% else %}<strong><i>Utilisateur supprimé</i></strong>{% endif %}<br>
+                                    {% if sujet.users %}
+                                        {% if sujet.users.clubs %}<img src="{{sujet.users.clubs.logo}}" class="logoPreviSuj" alt="Logo"> <span class="clubPays">{{ sujet.users.clubs.navbar }}</span>
+                                        {% else %}<i class="fas fa-times"></i> <span class="clubPays" style="background-color:azure;">Aucun</span>{% endif %} -  
+                                        {% if sujet.users.payss %}<img src="https://www.countryflags.io/{{sujet.users.payss.alpha2}}/flat/16.png"> <span class="clubPays">{{ sujet.users.payss.nomFr }}</span>
+                                        {% else %}<i class="fas fa-times"></i> <span class="clubPays" style="background-color:azure;">Aucun</span>{% endif %}
+                                    {% endif %}
+                                </td> 
+                            </tr>
+                            <tr>
+                                <td class="sujTitre" style="background-color:#F0F0F0;"><strong>{{sujet.titre}}</strong></td>
+                            </tr>
+                            <tr>
+                                <td class="text-center"><i>{{sujet.findDay(sujet.sujetDate)}}</i><br><i>{{sujet.findHour(sujet.sujetDate)}}</i>
+                                </td>
+                                <td colspan=4 style="word-break:break-word">{{sujet.details | nl2br}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </a>
+                {% else %}
+                    <a href="{{ path ('sujet_champ_page', {'slugCh' : sujet.championnats.slug, 'slugSuj' : sujet.slug}) }}" class="previSujet">
+                    <table class="table previSujet" border=1>
+                        <tbody>
+                            <tr>
+                                <th colspan=3 class="text-center">
+                                    <img src="{{sujet.championnats.logo}}" class="logoPreviSuj" alt="Logo"> {{sujet.championnats.nom}}
+                                </th>
+                            </tr>
+                            <tr>
+                                <td rowspan=2 style="vertical-align : middle;text-align:center;" width=15%>
+                                    {% if sujet.users %}
+                                        {% if sujet.users.filename %}
+                                            <img src="{{ vich_uploader_asset(sujet.users, 'imageFile') }}" class="avatarSujMin">
+                                        {% else %}
+                                            <img src="/images/avatarVide.jpg" class="avatarSujMin">
+                                        {% endif %}
+                                    {% else %}
+                                        <img src="/images/avatarVide.jpg" class="avatarSujMin">
+                                    {% endif %}
+                                </td>
+                                <td>{% if sujet.users %}<strong>{{sujet.users.pseudo}}</strong>{% else %}<strong><i>Utilisateur supprimé</i></strong>{% endif %}<br>
+                                {% if sujet.users %}
+                                    {% if sujet.users.clubs %}<img src="{{sujet.users.clubs.logo}}" class="logoPreviSuj" alt="Logo"> <span class="clubPays">{{ sujet.users.clubs.navbar }}</span>
+                                    {% else %}<i class="fas fa-times"></i> <span class="clubPays" style="background-color:azure;">Aucun</span>{% endif %} - 
+                                    {% if sujet.users.payss %}<img src="https://www.countryflags.io/{{sujet.users.payss.alpha2}}/flat/16.png"> <span class="clubPays">{{ sujet.users.payss.nomFr }}</span>
+                                    {% else %}<i class="fas fa-times"></i> <span class="clubPays" style="background-color:azure;">Aucun</span>{% endif %}</td> 
+                                {% endif %}
+                            </tr>
+                            <tr>
+                                <td class="sujTitre" style="background-color:#F0F0F0;"><strong>{{sujet.titre}}</strong></td>
+                            </tr>
+                            <tr>
+                                <td class="text-center"><i>{{sujet.findDay(sujet.sujetDate)}}</i><br><i>{{sujet.findHour(sujet.sujetDate)}}</i></td>
+                                <td colspan=4 style="word-break:break-word">{{sujet.details | nl2br}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </a>
+                {% endif %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,150 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ReseauFootball - Amis{% endblock %}
+
+
+{% block body %}
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-8">
+            <table class="table" border=1>
+                <thead>
+                    <tr>
+                        <th colspan=3 class="text-center">Liste d'amis</th>
+                    </tr>
+                </thead>
+            </table>
+            <div style="height:600px;overflow:auto;">
+            <table class="table">
+                <tbody>
+                    {% if listeAmis %}
+                    {% set col = 0 %}
+                    {% for listeAmi in listeAmis %}
+                        {% if listeAmi.userAjout.pseudo != app.user.pseudo %}
+                        <tr {% if  col  is divisible by(2) %}style="background-color: azure"{% endif %}>
+                            <td width=15% rowspan=2 style="vertical-align : middle;text-align:center;">
+                                    {% if listeAmi.userAjout.filename %}
+                                        <img src="{{ vich_uploader_asset(listeAmi.userAjout, 'imageFile') }}" class="avatarSujMin">
+                                    {% else %}
+                                        <img src="/images/avatarVide.jpg" class="avatarSujMin">
+                                    {% endif %}
+                            </td>
+                            <td><a href="{{ path ('user_show', {'slug' : listeAmi.userAjout.slug}) }}"><strong>{{listeAmi.userAjout.pseudo}}</strong></a> 
+                            <a href="{{ path('account_friends_delete', {'id': listeAmi.id})}}" class="badge badge-pill badge-danger"><i class="fas fa-trash"></i></a>
+                            </td>
+                            <td rowspan=2 style="vertical-align : middle;text-align:center;">{% if listeAmi.userAjout.clubs %}<img src="{{listeAmi.userAjout.clubs.logo}}" class="logProfilP" alt="Logo">{% else %}<i class="fas fa-times"></i>{% endif %}
+                                <br><br>{% if listeAmi.userAjout.payss %}<img src="https://www.countryflags.io/{{listeAmi.userAjout.payss.alpha2}}/flat/24.png">{% else %}<i class="fas fa-times"></i>{% endif %}
+                            </td>
+                        </tr>
+                        <tr {% if  col  is divisible by(2) %}style="background-color: azure"{% endif %}>
+                            <td style="word-break:break-word">{{listeAmi.userAjout.presentation}}</td>
+                        </tr>
+                        {% else %}
+                        <tr {% if  col  is divisible by(2) %}style="background-color: azure"{% endif %}>
+                            <td width=15% rowspan=2 style="vertical-align : middle;text-align:center;">
+                                    {% if listeAmi.userRec.filename %}
+                                        <img src="{{ vich_uploader_asset(listeAmi.userRec, 'imageFile') }}" class="avatarSujMin">
+                                    {% else %}
+                                        <img src="/images/avatarVide.jpg" class="avatarSujMin">
+                                    {% endif %}</td>
+                            <td><a href="{{ path ('user_show', {'slug' : listeAmi.userRec.slug}) }}"><strong>{{listeAmi.userRec.pseudo}}</strong></a>
+                            <a href="{{ path('account_friends_delete', {'id': listeAmi.id})}}" class="badge badge-pill badge-danger"><i class="fas fa-trash"></i></a>
+                            </td>
+                            <td rowspan=2 style="vertical-align : middle;text-align:center;">{% if listeAmi.userRec.clubs %}<img src="{{listeAmi.userRec.clubs.logo}}" class="logProfilP" alt="Logo">{% else %}<i class="fas fa-times"></i>{% endif %}
+                                <br><br>{% if listeAmi.userRec.payss %}<img src="https://www.countryflags.io/{{listeAmi.userRec.payss.alpha2}}/flat/24.png">{% else %}<i class="fas fa-times"></i>{% endif %}
+                            </td>
+                        </tr>
+                        <tr {% if  col  is divisible by(2) %}style="background-color: azure"{% endif %}>
+                            <td style="word-break:break-word">{{listeAmi.userRec.presentation}}</td>
+                        </tr>
+                        {% endif %}
+                        {% set col = col + 1 %}
+                    {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td style="background-color: azure" class="text-center"><h3 style="color:red">Aucun ami.</h3></td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+        </div>
+
+        <div class="col-4">
+
+            <table class="table" border=1>
+                <thead>
+                    <tr>
+                        <th colspan=3 class="text-center">Demandes d'amis</th>
+                    </tr>
+                </thead>
+            </table>
+            <div style="height:600px;overflow:auto;">
+            <table class="table" border=1>
+                <tbody>
+                    {% if demandes %}
+                    {% for demande in demandes %}
+                    <tr>
+                        <td colspan=2 class="text-center">{% if demande.userAjout.filename %}
+                                        <img src="{{ vich_uploader_asset(demande.userAjout, 'imageFile') }}" class="avatarSujMin">
+                                    {% else %}
+                                        <img src="/images/avatarVide.jpg" class="avatarSujMin">
+                                    {% endif %} <a href="{{ path ('user_show', {'slug' : demande.userAjout.slug}) }}"><strong>{{demande.userAjout.pseudo}}</strong></a></td>
+                    </tr>
+                    <tr>    
+                        <td style="vertical-align : middle;text-align:center;">
+                            <a href="" onClick="event.preventDefault()"><button type="button" class="btn btn-success addBouton" id="ajoutButton{{demande.id}}" data-id="{{demande.id}}">Accepter</button></a>
+                        </td>
+                        <td style="vertical-align : middle;text-align:center;">
+                            <a href="" onClick="event.preventDefault()"><button type="button" class="btn btn-danger supprBouton" id="supprButton{{demande.id}}" data-id="{{demande.id}}">Refuser</button></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td class="text-center"><h3 style="color:red">Aucune demande.</h3></td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+        </div>
+   
+    </div>
+</div>
+
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function(){
+            $(`.addBouton`).click(function(event){
+                $.post("/amisAccepte", {demandeId:event.target.dataset.id}, function(data){
+                if(data)
+                {
+                    var id = event.target.dataset.id;
+                
+                    $(`#ajoutButton${id}`).attr("class", "fas fa-user-check")
+                    $(`#ajoutButton${id}`).text("Accepté")
+                    $(`#supprButton${id}`).remove()
+                }
+                })
+            })
+            $(`.supprBouton`).click(function(event){
+                $.post("/amisRefuse", {demandeId:event.target.dataset.id}, function(data){
+                if(data)
+                {
+                    var id = event.target.dataset.id;
+                    $(`#supprButton${id}`).attr("class", "fas fa-times")
+                    $(`#supprButton${id}`).text("Refusé")
+                    $(`#ajoutButton${id}`).remove()
+                }
+                })
+            })
+        })
+    </script>
+{% endblock %}

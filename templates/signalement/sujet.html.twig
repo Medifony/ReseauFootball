@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Signaler un contenu.{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <h1 class="text-center" style="margin-top:10px; background-color: azure; border-style: outset;">Signaler un contenu:</h1>
+
+        <div class="row">
+            <div class="col-2">
+            </div>
+            <div class="col-8">
+                <table class="table" style="background-color:azure;" border=1>
+                            <tbody>
+                                <tr>
+                                    <td class="text-center" width=15%>
+                                        {% if sujet.users %}
+                                            {% if sujet.users.filename %}
+                                                <img src="{{ vich_uploader_asset(sujet.users, 'imageFile') }}" class="avatarSujMin">
+                                            {% else %}
+                                                <img src="/images/avatarVide.jpg" class="avatarSujMin">
+                                            {% endif %}
+                                        {% else %}
+                                                <img src="/images/avatarVide.jpg" class="avatarSujMin">
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="row">
+                                        <div class="col-lg-12">
+                                        {% if sujet.users %}
+                                            <a href="{{ path ('user_show', {'slug' : sujet.users.slug}) }}"><strong>{{sujet.users.pseudo}}</strong></a>
+                                        {% else %}
+                                            <strong><i>Utilisateur supprimé</i></strong>
+                                        {% endif %}
+                                        <br><br>
+                                        {% if sujet.users %}
+                                            {% if sujet.users.clubs.logo is defined %}<img src="{{sujet.users.clubs.logo}}" class="logoPreviSuj" alt="Logo"> <span class="clubPays">{{ sujet.users.clubs.navbar }}</span>{% endif %} - 
+                                            {% if sujet.users.payss.alpha2 is defined %}<img src="https://www.countryflags.io/{{sujet.users.payss.alpha2}}/flat/16.png"> <span class="clubPays">{{ sujet.users.payss.nomFr }}</span>{% endif %}                            
+                                        {% endif %}
+                                        </div>
+                                        </div>
+                                    </td> 
+                                </tr>
+                                <tr>
+                                    <td class="text-center"><i>{{sujet.findDay(sujet.sujetDate)}}</i><br><i>{{sujet.findHour(sujet.sujetDate)}}</i></td>
+                                    <td colspan=4 style="word-break:break-word">{{sujet.details | nl2br}}</td>
+                                </tr>
+                            </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                {{ form_start(form) }}
+
+                {{ form_widget(form) }}
+
+                <button type="submit" class="btn btn-danger">Signaler le sujet</button>
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Administration des Réponses !{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-10">
+            <h1 class="my-5">Gestion des réponses</h1>
+        </div>
+        <div class="col">
+            <a href="{{ path('admin_reponses_create')}}" class="btn btn-primary my-5">Ajouter une réponse</a>
+        </div>
+    </div>
+    
+    <table class="table table-over">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Commentaire</th>
+                <th>Sujet</th>
+                <th>Users</th>
+                <th>Date</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for reponse in reponses %}
+            <tr>
+                <td><span class="badge badge-primary rounded">{{reponse.id}}</span></td>
+                <td>{{reponse.commentaire|length > 50 ? reponse.commentaire|slice(0, 50) ~ '...' : reponse.commentaire}}</td>
+                <td>{% if reponse.sujets %}{{reponse.sujets.titre}}
+                    {% else %}Aucun
+                    {% endif %}
+                </td>
+                <td>{% if reponse.users %}{{reponse.users.pseudo}}
+                    {% else %}Aucun
+                    {% endif %}
+                </td>
+                <td>{{reponse.findDay(reponse.repDate)}} {{reponse.findHour(reponse.repDate)}}</td>
+                <td class="text-center">
+                    <a href="{{ path('admin_reponses_edit', {'id': reponse.id})}}" class="badge badge-pill badge-primary"><i class="fas fa-edit"></i></a>
+                    <a href="{{ path('admin_reponses_delete', {'id': reponse.id})}}" onclick="return confirm('Voulez-vous supprimer la réponse {{reponse.id}} ?')" class="badge badge-pill badge-danger"><i class="fas fa-trash"></i></a>
+                </td> 
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        {{ knp_pagination_render(reponses) }}
+    </div>
+</div>
+{% endblock %}

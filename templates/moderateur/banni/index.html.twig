@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bannissements{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="my-3 text-center" style="background-color: azure; border-style: outset;">Liste des utilisateurs bannis</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2">
+        </div>
+        <div class="col-8">
+            <table class="table table-over" border=1 style="margin-top:10px">
+                <thead>
+                <tr>
+                    <tr>
+                        <th colspan=3 class="text-center">Users bannis</th>
+                    </tr>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th class="text-center">Id</th>
+                        <th class="text-center">User</th>
+                        <th class="text-center">Débannir</th>
+                    </tr>
+                    {% for banni in bannis %}
+                        {% for ban in banni.users %}
+                        <tr>
+                            <td class="text-center" width=10%>{{ban.id}}</td>
+                            <td ><strong>{{ban.pseudo}}</strong></td>
+                            <td class="text-center" width=10%><a href="{{ path ('moderateur_ban_delete', {'user' : ban.id}) }}" onclick="return confirm('Voulez-vous supprimer l'utilisateur {{ban.pseudo}} ?')" class="badge badge-pill badge-danger"><i class="fas fa-trash"></i></a></td>
+                        </tr>
+                        {% endfor %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

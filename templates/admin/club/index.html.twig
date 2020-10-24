@@ -1,0 +1,55 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Administration des Clubs !{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-10">
+            <h1 class="my-5">Gestion des clubs</h1>
+        </div>
+        <div class="col">
+            <a href="{{ path('admin_clubs_create')}}" class="btn btn-primary my-5">Ajouter un club</a>
+        </div>
+    </div>
+    
+    <table class="table table-over">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th class="text-center">Logo</th>
+                <th class="text-center">Championnat</th>
+                <th>NavBar</th>
+                <th>Slug</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for club in clubs %}
+            <tr>
+                <td><span class="badge badge-primary rounded">{{club.id}}</span></td>
+                <td>{{club.nom}}</td>
+                <td class="text-center"><img src="{{ club.logo }}" class="imgAdmin mr-2" alt="Photo"></td>
+                <td class="text-center">
+                    {% if club.championnats %}<img src="{{ club.championnats.logo }}" class="imgAdmin mr-2" alt="Photo"> {{club.championnats.nom}}
+                    {% else %}Aucun
+                    {% endif %}    
+                </td>
+                <td>{{club.navbar}}</td>
+                <td>{{club.slug}}</td>
+                <td class="text-center">
+                    <a href="{{ path('admin_clubs_edit', {'id': club.id})}}" class="badge badge-pill badge-primary"><i class="fas fa-edit"></i></a>
+                    <a href="{{ path('admin_clubs_delete', {'id': club.id})}}" onclick="return confirm('Voulez-vous supprimer le club {{club.navbar}} ?')" class="badge badge-pill badge-danger"><i class="fas fa-trash"></i></a>
+                </td> 
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        {{ knp_pagination_render(clubs) }}
+    </div>
+</div>
+{% endblock %}

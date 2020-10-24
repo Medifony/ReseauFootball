@@ -1,0 +1,51 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Administration des Users !{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-10">
+            <h1 class="my-5">Gestion des users</h1>
+        </div>
+    </div>
+    
+    <table class="table table-over">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Avatar</th>
+                <th>Pseudo</th>
+                <th>Mail</th>
+                <th>Date création</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td><span class="badge badge-primary rounded">{{user.id}}</span></td>
+                <td>{% if user.filename %}
+                        <img src="{{ vich_uploader_asset(user, 'imageFile') }}" class="imgAdmin">
+                    {% else %}
+                        <img src="/images/avatarVide.jpg" class="imgAdmin">
+                    {% endif %}
+                </td>
+                <td>{{user.pseudo}}</td>
+                <td>{{user.email}}
+                <td>{{user.findDay(user.dateCrea)}}</td>
+                <td class="text-center">
+                    <a href="{{ path('admin_users_edit', {'id': user.id})}}" class="badge badge-pill badge-primary"><i class="fas fa-edit"></i></a>
+                    <a href="{{ path('admin_users_delete', {'id': user.id})}}" onclick="return confirm('Voulez-vous supprimer l'utilisateur ?')" class="badge badge-pill badge-danger"><i class="fas fa-trash"></i></a>
+                </td> 
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        {{ knp_pagination_render(users) }}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,147 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ReseauFootball - Club{% endblock %}
+
+{% block body %}
+
+<div class="container">
+        <div class="row">
+            <div class="col-2">
+                <div class="menuCote">
+                    <nav class="navbar navbar-light bg-light">
+                        <ul class="navbar-nav navigCote">
+                            <li class="nav-item text-center" style="background-color:#F0F0F0;">
+                                <a class="nav-link" href="{{ path ('champ_page', {'slug' : champ.slug}) }}">
+                                     {% if champ.payss %}<img src="https://www.countryflags.io/{{champ.payss.alpha2}}/flat/48.png">{% endif %}<br><strong>{{champ.nom}}</strong></a>
+                            </li>
+                            {% set i = 0 %}
+                            {% for club in champ.clubs %}
+                                {% if i < 10 %}
+                                    <li class="nav-item {% if app.user %}{% if app.user.clubs %}{% if app.user.clubs.slug == club.slug %}monClub{% endif %}{% endif %}{% endif %} nomClNav">
+                                        <a class="nav-link" href="{{ path ('club_page', {'slugCh' : champ.slug, 'slugCl' : club.slug}) }}">
+                                        <img src="{{club.logo}}" class="logoNav" alt="Logo"> {{ club.navbar }}</a>
+                                    </li>
+                                {% endif %}
+                                {% set i = i + 1 %}
+                            {% endfor %}
+                        </ul>
+                    </nav>
+                    {% for club in clubs %}
+                        <a href="{{ path ('sujet_club_create', {'slugCh' : champ.slug, 'slugCl' : club.slug}) }}"><button type="button" class="btn btn-info newSujet listeClubs">Nouveau Sujet</button></a>
+                    {% endfor %}
+                </div>
+            </div>
+        
+            <div class="col-8">
+
+                <h1 class="text-center titreClCh">
+                    {% for club in clubs %}<img src="{{club.logo}}" class="logoTitre" alt="Logo"> {{ club.nom }} <img src="{{club.logo}}" class="logoTitre" alt="Logo">{% endfor %}
+                </h1>
+
+                <table class="table" border=1>
+                    <thead>
+                        <tr>
+                            <th class="text-center">Place</th>
+                            <th class="text-center">Matchs</th>
+                            <th class="text-center">Victoires</th>
+                            <th class="text-center">Nuls</th>
+                            <th class="text-center">Défaites</th>
+                            <th class="text-center">Points.</th>
+                            <th class="text-center">Buts</th>
+                            <th class="text-center">Encaissés</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for club in clubs %}
+                        {% if club.classements %}
+                        <tr>
+                            <td class="text-center">{% for club in clubs %}{{club.classements.place}}{% endfor %}</td>
+                            <td class="text-center">{% for club in clubs %}{{club.classements.total}}{% endfor %}</td>
+                            <td class="text-center">{% for club in clubs %}{{club.classements.victoires}}{% endfor %}</td>
+                            <td class="text-center">{% for club in clubs %}{{club.classements.nuls}}{% endfor %}</td>
+                            <td class="text-center">{% for club in clubs %}{{club.classements.defaites}}{% endfor %}</td>
+                            <td class="text-center">{% for club in clubs %}{{club.classements.points}}{% endfor %}</td>
+                            <td class="text-center">{% for club in clubs %}{{club.classements.buts}}{% endfor %}</td>
+                            <td class="text-center">{% for club in clubs %}{{club.classements.encaisse}}{% endfor %}</td>
+                        </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan=8 class="text-center"><h3 style="color:red">Classement indisponible.</h3></td>
+                            </tr>
+                        {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                {% if sujets %}
+                {% for sujet in sujets %}
+                    {% for club in clubs %} 
+                        <a href="{{ path ('sujet_club_page', {'slugCh' : champ.slug, 'slugCl' : club.slug, 'slugSuj' : sujet.slug}) }}" class="previSujet">
+                    {% endfor %}
+
+                    <table class="table previSujet" border=1>
+                        <tbody>
+                            <tr>
+                                <td rowspan=2 class="text-center" width=15%>
+                                    {% if sujet.users %}
+                                        {% if sujet.users.filename %}
+                                            <img src="{{ vich_uploader_asset(sujet.users, 'imageFile') }}" class="avatarSujMin">
+                                        {% else %}
+                                            <img src="/images/avatarVide.jpg" class="avatarSujMin">
+                                        {% endif %}
+                                    {% else %}
+                                        <img src="/images/avatarVide.jpg" class="avatarSujMin">
+                                    {% endif %}
+                                </td>
+                                <td>{% if sujet.users %}<strong>{{sujet.users.pseudo}}</strong>{% else %}<strong><i>Utilisateur supprimé</i></strong>{% endif %}<br>
+                                {% if sujet.users %}
+                                    {% if sujet.users.clubs %}<img src="{{sujet.users.clubs.logo}}" class="logoPreviSuj" alt="Logo"> <span class="clubPays">{{ sujet.users.clubs.navbar }}</span>
+                                    {% else %}<i class="fas fa-times"></i> <span class="clubPays" style="background-color:azure;">Aucun</span>{% endif %} -  
+                                    {% if sujet.users.payss %}<img src="https://www.countryflags.io/{{sujet.users.payss.alpha2}}/flat/16.png"> <span class="clubPays">{{ sujet.users.payss.nomFr }}</span>
+                                    {% else %}<i class="fas fa-times"></i> <span class="clubPays" style="background-color:azure;">Aucun</span>{% endif %}
+                                {% endif %}
+                                </td> 
+                            </tr>
+                            <tr>
+                                <td class="sujTitre" style="background-color:#F0F0F0;"><strong>{{sujet.titre}}</strong></td>
+                            </tr>
+                            <tr>
+                                <td class="text-center"><i>{{sujet.findDay(sujet.sujetDate)}}</i><br><i>{{sujet.findHour(sujet.sujetDate)}}</i>
+                                </td>
+                                <td colspan=4 style="word-break:break-word">{{sujet.details | nl2br}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    </a>
+                {% endfor %}
+                {% else %}
+                    <h2 class="text-center" style="color: red; margin-top:10px; background-color: azure; border-style: outset;">Aucun sujet posté.</h2>
+                {% endif %}
+            </div>
+
+            <div class="col-2">
+                <div class="menuCote">
+                    <nav class="navbar navbar-light bg-light">
+                        <ul class="navbar-nav navigCote">
+                            <li class="nav-item text-center" style="background-color:#F0F0F0;">
+                                <a class="nav-link" href="{{ path ('champ_page', {'slug' : champ.slug}) }}">
+                                     {% if champ.payss %}<img src="https://www.countryflags.io/{{champ.payss.alpha2}}/flat/48.png">{% endif %}<br><strong>{{champ.nom}}</strong></a>
+                            </li>
+                            {% set i = 0 %}
+                            {% for club in champ.clubs %}
+                                {% if i >= 10 %}
+                                    <li class="nav-item {% if app.user %}{% if app.user.clubs %}{% if app.user.clubs.slug == club.slug %}monClub{% endif %}{% endif %}{% endif %} nomClNav">
+                                        <a class="nav-link" href="{{ path ('club_page', {'slugCh' : champ.slug, 'slugCl' : club.slug}) }}">
+                                        <img src="{{club.logo}}" class="logoNav" alt="Logo"> {{ club.navbar }}</a>
+                                    </li>
+                                {% endif %}
+                                {% set i = i + 1 %}
+                            {% endfor %}
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

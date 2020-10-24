@@ -1,0 +1,254 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ReseauFootball - Sujet{% endblock %}
+
+{% block body %}
+<div class="container">
+        <div class="row">
+            <div class="col-2">
+                <div class="menuCote">
+                    <nav class="navbar navbar-light bg-light">
+                        <ul class="navbar-nav navigCote">
+                            <li class="nav-item text-center" style="background-color:#F0F0F0;">
+                                <a class="nav-link" href="{{ path ('champ_page', {'slug' : champ.slug}) }}">
+                                    <img src="https://www.countryflags.io/{{champ.payss.alpha2}}/flat/48.png"><br><strong>{{champ.nom}}</strong></a>
+                            </li>
+                            {% set i = 0 %}
+                            {% for club in champ.clubs %}
+                                {% if i < 10 %}
+                                    <li class="nav-item {% if app.user %}{% if app.user.clubs %}{% if app.user.clubs.slug == club.slug %}monClub{% endif %}{% endif %}{% endif %} nomClNav">
+                                        <a class="nav-link" href="{{ path ('club_page', {'slugCh' : champ.slug, 'slugCl' : club.slug}) }}">
+                                        <img src="{{club.logo}}" class="logoNav" alt="Logo"> {{ club.navbar }}</a>
+                                    </li>
+                                {% endif %}
+                                {% set i = i + 1 %}
+                            {% endfor %}
+                        </ul>
+                    </nav>
+                    {% if club is defined %}
+                        <a href="{{ path ('club_page', {'slugCh' : champ.slug, 'slugCl' : club.slug}) }}">
+                            <button type="button" class="btn btn-info newSujet">Retour liste Sujets</button>
+                        </a>
+                    {% else %}
+                        <a href="{{ path ('champ_page', {'slug' : champ.slug}) }}">
+                            <button type="button" class="btn btn-info newSujet">Retour liste Sujets</button>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        
+            <div class="col-8">
+                
+                {% if club is defined %}
+                    <h1 class="text-center titreClCh">
+                        <img src="{{club.logo}}" class="logoTitre" alt="Logo"> {{ club.nom }} <img src="{{club.logo}}" class="logoTitre" alt="Logo">
+                    </h1>
+                {% else %}
+                    <h1 class="text-center titreClCh">
+                        <img src="https://www.countryflags.io/{{champ.payss.alpha2}}/flat/48.png"> {{champ.nom}} <img src="https://www.countryflags.io/{{champ.payss.alpha2}}/flat/48.png">
+                    </h1>
+                {% endif %}
+
+                <h2 class="sujPageTitre">Sujet: <span style="color:crimson;">"{{sujet.titre}}"</span></h1>
+
+                {% if club is defined %}
+                    <a href="{{ path ('sujet_club_create', {'slugCh' : champ.slug, 'slugCl' : club.slug}) }}"><button type="button" class="btn btn-info">Nouveau Sujet</button></a>
+                {% else %}
+                    <a href="{{ path ('sujet_champ_create', {'slug' : champ.slug}) }}"><button type="button" class="btn btn-info">Nouveau Sujet</button></a>
+                {% endif %}
+
+                
+                <a href="#rep"><button type="button" class="btn btn-info">Répondre</button></a>
+
+                <table class="table" style="background-color:azure;" border=1>
+                    <tbody>
+                        <tr>
+                            <td class="text-center" width=15%>
+                                {% if sujet.users %}
+                                    {% if sujet.users.filename %}
+                                        <img src="{{ vich_uploader_asset(sujet.users, 'imageFile') }}" class="avatarSujMin">
+                                    {% else %}
+                                        <img src="/images/avatarVide.jpg" class="avatarSujMin">
+                                    {% endif %}
+                                {% else %}
+                                        <img src="/images/avatarVide.jpg" class="avatarSujMin">
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="row">
+                                <div class="col-lg-12">
+                                {% if sujet.users %}
+                                    <a href="{{ path ('user_show', {'slug' : sujet.users.slug}) }}"><strong>{{sujet.users.pseudo}}</strong></a>
+                                {% else %}
+                                    <strong><i>Utilisateur supprimé</i></strong>
+                                {% endif %}
+                                {% if is_granted('ROLE_MODERATEUR') %}
+                                    {% if sujet.users %}
+                                        {% if sujet.users.slug != app.user.slug %}
+                                            <a href="{{ path('moderateur_sujet_edit', {'id': sujet.id})}}" class="badge badge-pill badge-primary"><i class="fas fa-edit"></i></a>
+                                            <a href="{{ path('moderateur_sujet_delete', {'id': sujet.id})}}" class="badge badge-pill badge-danger"><i class="fas fa-trash"></i></a>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                                <br>
+                                {% if sujet.users %}
+                                    {% if sujet.users.clubs %}<img src="{{sujet.users.clubs.logo}}" class="logoPreviSuj" alt="Logo"> <span class="clubPays">{{ sujet.users.clubs.navbar }}</span>
+                                    {% else %}<i class="fas fa-times"></i> <span class="clubPays" style="background-color:azure;">Aucun</span>{% endif %} - 
+                                    {% if sujet.users.payss %}<img src="https://www.countryflags.io/{{sujet.users.payss.alpha2}}/flat/16.png"> <span class="clubPays">{{ sujet.users.payss.nomFr }}</span>
+                                    {% else %}<i class="fas fa-times"></i> <span class="clubPays" style="background-color:azure;">Aucun</span>{% endif %}                            
+                                {% endif %}
+                                {% if app.user and sujet.users %}
+                                        {% if sujet.users.slug != app.user.slug %}
+                                            <br> 
+                                            {% set trouveAmi = 0 %}
+                                            {% for checkAmi in checkAmis %}
+                                                {% if (checkAmi.userAjout.slug == sujet.users.slug) or (checkAmi.userRec.slug == sujet.users.slug) %}
+                                                        <i class="fas fa-check"></i>
+                                                        {% set trouveAmi = 1 %}
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% if trouveAmi == 0 %}
+                                                <a href="" onClick="event.preventDefault()"><i class="fas fa-user-plus" id="addButton" data-slug="{{sujet.users.slug}}"></i> </a>
+                                            {% endif %}
+                                            <a href="{{ path ('newConversations', {'slug' : sujet.users.slug}) }}" class="pull-right"><i class="far fa-envelope"></i></a> 
+                                            <a href="{{ path ('signalement_sujet', {'slug' : sujet.slug}) }}" class="badge badge-pill badge-danger"><i class="fas fa-exclamation-triangle"></i></a>
+                                        {% else %}
+                                            <br>
+                                            {% if is_granted('ROLE_MODERATEUR') %}
+                                                <a href="{{ path('moderateur_sujet_edit', {'id': sujet.id})}}" class="badge badge-pill badge-primary"><i class="fas fa-edit"></i></a>
+                                            {% endif %}
+                                            <a href="{{ path('account_sujet_delete', {'id': sujet.id})}}" class="badge badge-pill badge-danger"><i class="fas fa-trash"></i></a>
+                                        {% endif %}
+                                {% endif %}
+                                </div>
+                                </div>
+                            </td> 
+                        </tr>
+                         <tr>
+                            <td class="text-center"><i>{{sujet.findDay(sujet.sujetDate)}}</i><br><i>{{sujet.findHour(sujet.sujetDate)}}</i></td>
+                            <td colspan=4 style="word-break:break-word">{{sujet.details | nl2br}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                {% for reponse in reponses %}
+                    <table class="table" border=1>
+                        <tbody>
+                            <tr>
+                                <td class="text-center" width=15%>
+                                {% if reponse.users %}
+                                    {% if reponse.users.filename %}
+                                        <img src="{{ vich_uploader_asset(reponse.users, 'imageFile') }}" class="avatarSujMin">
+                                    {% else %}
+                                        <img src="/images/avatarVide.jpg" class="avatarSujMin">
+                                    {% endif %}
+                                {% else %}
+                                    <img src="/images/avatarVide.jpg" class="avatarSujMin">
+                                {% endif %}
+                                </td>
+                                <td>
+                                {% if reponse.users %}<a href="{{ path ('user_show', {'slug' : reponse.users.slug}) }}"><strong>{{reponse.users.pseudo}}</strong></a>
+                                {% else %}
+                                    <strong><i>Utilisateur supprimé</i></strong>
+                                {% endif %}
+                                {% if is_granted('ROLE_MODERATEUR') %}
+                                    <a href="{{ path('moderateur_reponse_edit', {'id': reponse.id})}}" class="badge badge-pill badge-primary"><i class="fas fa-edit"></i></a>
+                                    <a href="{{ path('moderateur_reponse_delete', {'id': reponse.id})}}" class="badge badge-pill badge-danger"><i class="fas fa-trash"></i></a>
+                                {% endif %}
+                                {% if reponse.users %}
+                                <br>{% if reponse.users.clubs %}<img src="{{reponse.users.clubs.logo}}" class="logoPreviSuj" alt="Logo"> <span class="clubPays">{{ reponse.users.clubs.navbar }}</span>
+                                {% else %}<i class="fas fa-times"></i> <span class="clubPays" style="background-color:azure;">Aucun</span>{% endif %} - 
+                                {% if reponse.users.payss %}<img src="https://www.countryflags.io/{{reponse.users.payss.alpha2}}/flat/16.png"> <span class="clubPays">{{ reponse.users.payss.nomFr }}</span>
+                                {% else %}<i class="fas fa-times"></i> <span class="clubPays" style="background-color:azure;">Aucun</span>{% endif %}
+                                {% endif %}
+
+                                {% if app.user and reponse.users %}
+                                        {% if reponse.users.slug != app.user.slug %}
+                                            <br> 
+                                            {% set trouveAmi = 0 %}
+                                            {% for checkAmi in checkAmis %}
+                                                {% if (checkAmi.userAjout.slug == reponse.users.slug) or (checkAmi.userRec.slug == reponse.users.slug) %}
+                                                        <i class="fas fa-check"></i>
+                                                        {% set trouveAmi = 1 %}
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% if trouveAmi == 0 %}
+                                                <a href="" onClick="event.preventDefault()"><i class="fas fa-user-plus" id="addButton" data-slug="{{reponse.users.slug}}"></i> </a>
+                                            {% endif %}
+                                            <a href="{{ path ('newConversations', {'slug' : reponse.users.slug}) }}" class="pull-right"><i class="far fa-envelope"></i></a> 
+                                            <a href="{{ path ('signalement_reponse', {'id' : reponse.id}) }}" class="badge badge-pill badge-danger"><i class="fas fa-exclamation-triangle"></i></a>
+                                        {% else %}
+                                            <br>
+                                            {% if is_granted('ROLE_MODERATEUR') %}
+                                                <a href="{{ path('moderateur_reponse_edit', {'id': reponse.id})}}" class="badge badge-pill badge-primary"><i class="fas fa-edit"></i></a>
+                                            {% endif %}
+                                            <a href="{{ path('account_reponse_delete', {'id': reponse.id})}}" class="badge badge-pill badge-danger"><i class="fas fa-trash"></i></a>
+                                        {% endif %}
+                                {% endif %}
+                                
+                                </td> 
+                            </tr>
+                            <tr>
+                                <td class="text-center"><i>{{reponse.findDay(reponse.repDate)}}</i><br><i>{{reponse.findHour(reponse.repDate)}}</i></td>
+                                <td colspan=4 style="word-break:break-word">{{reponse.commentaire | nl2br}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                {% endfor %}
+
+                {% if app.user %}
+                <div class="creaReponse" id="rep">
+                    {{ form_start(form) }}
+                    {{ form_widget(form) }}
+                    <button type="submit" class="btn btn-success">Poster</button>
+                    {{ form_end(form) }}
+                </div>
+                {% else %}
+                    <h2 class="text-center creaReponse" id="rep">Connectez vous pour participer à cette discussion !</h2>
+                {% endif %}
+
+            </div>
+
+            <div class="col-2">
+                <div class="menuCote">
+                    <nav class="navbar navbar-light bg-light">
+                        <ul class="navbar-nav navigCote">
+                            <li class="nav-item text-center" style="background-color:#F0F0F0;">
+                                <a class="nav-link" href="{{ path ('champ_page', {'slug' : champ.slug}) }}">
+                                    <img src="https://www.countryflags.io/{{champ.payss.alpha2}}/flat/48.png"><br><strong>{{champ.nom}}</strong></a>
+                            </li>
+                            {% set i = 0 %}
+                            {% for club in champ.clubs %}
+                                {% if i >= 10 %}
+                                    <li class="nav-item {% if app.user %}{% if app.user.clubs %}{% if app.user.clubs.slug == club.slug %}monClub{% endif %}{% endif %}{% endif %} nomClNav">
+                                        <a class="nav-link" href="{{ path ('club_page', {'slugCh' : champ.slug, 'slugCl' : club.slug}) }}">
+                                        <img src="{{club.logo}}" class="logoNav" alt="Logo"> {{ club.navbar }}</a>
+                                    </li>
+                                {% endif %}
+                                {% set i = i + 1 %}
+                            {% endfor %}
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{# Jquery #}
+{% block javascripts %}
+    <script>
+        $(document).ready(function(){
+            $("#addButton").click(function(event){
+                $.post("/amis", {userId:event.target.dataset.slug}, function(data){
+                if(data)
+                {
+                    $("#addButton").attr("class", "fas fa-check")
+                    $("#addButton").unbind()
+                }
+                })
+            })
+        })
+    </script>
+{% endblock %}

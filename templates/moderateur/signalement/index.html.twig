@@ -1,0 +1,133 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Signalements{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="text-center" style="margin-top:10px; background-color: azure;
+  border-style: outset;">Contenus en attente d'être traités.</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <h2 class="text-center" style="margin-top:10px; background-color: azure;
+  border-style: outset;">Sujets.</h2>
+            {% if signalementsSuj %}
+            {% for signalement in signalementsSuj %}
+                    <table class="table" border=1>
+                        <thead>
+                            <tr>
+                                <th colspan=2 style="background-color:azure;">Ce sujet a été signalé <span style="color:red;">{{signalement.total}}</span> fois. - <a href="{{ path('moderateur_signalement_sujet', {'id': signalement.signalement.sujets.id})}}"><button type="submit" class="btn btn-info">Consulter</button></a></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                    <td class="text-center" width=15%>
+                                        {% if signalement.signalement.sujets.users %}
+                                            {% if signalement.signalement.sujets.users.filename %}
+                                                <img src="{{ vich_uploader_asset(signalement.signalement.sujets.users, 'imageFile') }}" class="avatarSujMin">
+                                            {% else %}
+                                                <img src="/images/avatarVide.jpg" class="avatarSujMin">
+                                            {% endif %}
+                                        {% else %}
+                                                <img src="/images/avatarVide.jpg" class="avatarSujMin">
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="row">
+                                        <div class="col-lg-12">
+                                        {% if signalement.signalement.sujets.users %}
+                                            <a href="{{ path ('user_show', {'slug' : signalement.signalement.sujets.users.slug}) }}"><strong>{{signalement.signalement.sujets.users.pseudo}}</strong></a>
+                                        {% else %}
+                                            <strong><i>Utilisateur supprimé</i></strong>
+                                        {% endif %}
+                                        <br><br>
+                                        {% if signalement.signalement.sujets.users %}
+                                            {% if signalement.signalement.sujets.users.clubs.logo is defined %}<img src="{{signalement.signalement.sujets.users.clubs.logo}}" class="logoPreviSuj" alt="Logo"> <span class="clubPays">{{ signalement.signalement.sujets.users.clubs.navbar }}</span>{% endif %} - 
+                                            {% if signalement.signalement.sujets.users.payss.alpha2 is defined %}<img src="https://www.countryflags.io/{{signalement.signalement.sujets.users.payss.alpha2}}/flat/16.png"> <span class="clubPays">{{ signalement.signalement.sujets.users.payss.nomFr }}</span>{% endif %}                            
+                                        {% endif %}
+                                        </div>
+                                        </div>
+                                    </td> 
+                                </tr>
+                                <tr>
+                                    <td class="text-center"><i>{{signalement.signalement.sujets.findDay(signalement.signalement.sujets.sujetDate)}}</i><br><i>{{signalement.signalement.sujets.findHour(signalement.signalement.sujets.sujetDate)}}</i></td>
+                                    <td colspan=4 style="word-break:break-word">{{signalement.signalement.sujets.details | nl2br}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan=2 style="word-break:break-word">
+                                    {% if signalement.signalement.sujets.clubs %}
+                                        <strong>Titre:</strong>  <a href="{{ path ('sujet_club_page', {'slugCh' : signalement.signalement.sujets.championnats.slug, 'slugCl' : signalement.signalement.sujets.clubs.slug, 'slugSuj' : signalement.signalement.sujets.slug}) }}"><strong><i>{{signalement.signalement.sujets.titre}}</i></strong></a></td>
+                                    {% else %}
+                                        <strong>Titre:</strong> <a href="{{ path ('sujet_champ_page', {'slugCh' : signalement.signalement.sujets.championnats.slug, 'slugSuj' : signalement.signalement.sujets.slug}) }}"><strong><i>{{signalement.signalement.sujets.titre}}</i></strong></a></td>
+                                    {% endif %}
+                                </tr>
+                        </tbody>
+                    </table>
+            
+                {% endfor %}
+                {% else %}
+                    <h2 class="text-center" style="color: red; margin-top:10px; background-color: azure; border-style: outset;">Aucun sujet signalé.</h2>
+                {% endif %}
+            </div>
+            <div class="col-6">
+            <h2 class="text-center" style="margin-top:10px; background-color: azure;
+                        border-style: outset;">Reponses.</h2>
+                {% if signalementsRep %}
+                {% for signalement in signalementsRep %}
+                    <table class="table" border=1>
+                        <thead>
+                            <tr>
+                                <th colspan=2 style="background-color:azure;">Cette réponse a été signalée <span style="color:red;">{{signalement.total}}</span> fois. - <a href="{{ path('moderateur_signalement_reponse', {'id': signalement.signalement.reponses.id})}}"><button type="submit" class="btn btn-info">Consulter</button></a></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-center" width=15%>
+                                {% if signalement.signalement.reponses.users %}
+                                    {% if signalement.signalement.reponses.users.filename %}
+                                        <img src="{{ vich_uploader_asset(signalement.signalement.reponses.users, 'imageFile') }}" class="avatarSujMin">
+                                    {% else %}
+                                        <img src="/images/avatarVide.jpg" class="avatarSujMin">
+                                    {% endif %}
+                                {% else %}
+                                    <img src="/images/avatarVide.jpg" class="avatarSujMin">
+                                {% endif %}
+                                </td>
+                                <td>
+                                {% if signalement.signalement.reponses.users %}<a href="{{ path ('user_show', {'slug' : signalement.signalement.reponses.users.slug}) }}"><strong>{{signalement.signalement.reponses.users.pseudo}}</strong></a>
+                                {% else %}
+                                    <strong><i>Utilisateur supprimé</i></strong>
+                                {% endif %}
+                                {% if signalement.signalement.reponses.users %}
+                                <br><br>{% if signalement.signalement.reponses.users.clubs.logo is defined %}<img src="{{signalement.signalement.reponses.users.clubs.logo}}" class="logoPreviSuj" alt="Logo"> <span class="clubPays">{{ signalement.signalement.reponses.users.clubs.navbar }}</span>{% endif %} - 
+                                {% if signalement.signalement.reponses.users.payss.alpha2 is defined %}<img src="https://www.countryflags.io/{{signalement.signalement.reponses.users.payss.alpha2}}/flat/16.png"> <span class="clubPays">{{ signalement.signalement.reponses.users.payss.nomFr }}</span>{% endif %}
+                                {% endif %}
+                                </td> 
+                            </tr>
+                            <tr>
+                                <td class="text-center"><i>{{signalement.signalement.reponses.findDay(signalement.signalement.reponses.repDate)}}</i><br><i>{{signalement.signalement.reponses.findHour(signalement.signalement.reponses.repDate)}}</i></td>
+                                <td colspan=4 style="word-break:break-word">{{signalement.signalement.reponses.commentaire | nl2br}}</td>
+                            </tr>
+                            <tr>
+                                    <td colspan=2 style="word-break:break-word">
+                                    {% if signalement.signalement.reponses.sujets.clubs %}
+                                        <strong>Titre:</strong>  <a href="{{ path ('sujet_club_page', {'slugCh' : signalement.signalement.reponses.sujets.championnats.slug, 'slugCl' : signalement.signalement.reponses.sujets.clubs.slug, 'slugSuj' : signalement.signalement.reponses.sujets.slug}) }}"><strong><i>{{signalement.signalement.reponses.sujets.titre}}</i></strong></a></td>
+                                    {% else %}
+                                        <strong>Titre:</strong> <a href="{{ path ('sujet_champ_page', {'slugCh' : signalement.signalement.reponses.sujets.championnats.slug, 'slugSuj' : signalement.signalement.reponses.sujets.slug}) }}"><strong><i>{{signalement.signalement.reponses.sujets.titre}}</i></strong></a></td>
+                                    {% endif %}
+                            </tr>
+                        </tbody>
+                    </table>
+            {% endfor %}
+            {% else %}
+                <h2 class="text-center" style="color: red; margin-top:10px; background-color: azure; border-style: outset;">Aucune réponse signalée.</h2>
+            {% endif %}
+        </div>
+        </div>
+    </div>
+
+{% endblock %}

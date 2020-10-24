@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Page indisponible.{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <div class="row">
+            <h1 style="margin-top:20px; color:red;">La page que vous recherchez n'est pas disponible pour le moment.</h1>
+            <p>Vous pouvez retourner à l'accueil et continuer votre visite sur notre site !</p>
+        </div>
+        <div class="row">
+            <a href="{{ path('homepage') }}" class="btn btn-primary">Retour à l'accueil</a>
+        </div>
+    </div>
+
+{% endblock %}

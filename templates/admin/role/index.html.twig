@@ -1,0 +1,94 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Administration des Rôles !{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="my-5 text-center">Gestion des rôles</h1>
+            <a href="{{ path('admin_roles_create')}}" class="btn btn-primary" style="margin-bottom:5px">Ajouter un User</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <table class="table table-over" border=1 style="margin-top:10px">
+                <thead>
+                <tr>
+                    <tr>
+                        <th colspan=2 class="text-center">Administrateurs</th>
+                    </tr>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th class="text-center">Id</th>
+                        <th>User</th>
+                    </tr>
+                    {% for admin in admins %}
+                        {% for admi in admin.users %}
+                        <tr>
+                            <td class="text-center">{{admi.id}}</td>
+                            <td>{{admi.pseudo}}</td>
+                            <td class="text-center"><a href="{{ path ('admin_roles_delete', {'user' : admi.id, 'role' : admin.id}) }}" onclick="return confirm('Voulez-vous supprimer l'utilisateur {{admi.pseudo}} ?')" class="badge badge-pill badge-danger text-center"><i class="fas fa-trash"></i></a></td>
+                        </tr>
+                        {% endfor %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-4">
+            <table class="table table-over" border=1 style="margin-top:10px">
+                <thead>
+                <tr>
+                    <tr>
+                        <th colspan=2 class="text-center">Modérateurs</th>
+                    </tr>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th class="text-center">Id</th>
+                        <th>User</th>
+                    </tr>
+                    {% for moderateur in moderateurs %}
+                        {% for modo in moderateur.users %}
+                        <tr>
+                            <td class="text-center">{{modo.id}}</td>
+                            <td>{{modo.pseudo}}</td>
+                            <td class="text-center"><a href="{{ path ('admin_roles_delete', {'user' : modo.id, 'role' : moderateur.id}) }}" onclick="return confirm('Voulez-vous supprimer l'utilisateur {{modo.pseudo}} ?')" class="badge badge-pill badge-danger"><i class="fas fa-trash"></i></a></td>
+                        </tr>
+                        {% endfor %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col-4">
+            <table class="table table-over" border=1 style="margin-top:10px">
+                <thead>
+                <tr>
+                    <tr>
+                        <th colspan=2 class="text-center">Users bannis</th>
+                    </tr>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th class="text-center">Id</th>
+                        <th>User</th>
+                    </tr>
+                    {% for banni in bannis %}
+                        {% for ban in banni.users %}
+                        <tr>
+                            <td class="text-center">{{ban.id}}</td>
+                            <td>{{ban.pseudo}}</td>
+                            <td class="text-center"><a href="{{ path ('admin_roles_delete', {'user' : ban.id, 'role' : banni.id}) }}" onclick="return confirm('Voulez-vous supprimer l'utilisateur {{ban.pseudo}} ?')" class="badge badge-pill badge-danger"><i class="fas fa-trash"></i></a></td>
+                        </tr>
+                        {% endfor %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

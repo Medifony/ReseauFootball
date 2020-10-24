@@ -1,0 +1,185 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Page de {{user.pseudo}}{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="text-center" style="margin-top:10px;">Profil de {{user.pseudo}}</h1>
+                {% if 'ROLE_BANNED' in user.getRoles %}<h2 class="text-center" style="color:red; background-color: azure; border-style: outset;">Utilisateur banni</h2>{% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <table class="table" border=1>
+                    <tbody>
+                        <tr>
+                            <td width=30% rowspan=3 class="text-center">
+                                {% if user.filename %}
+                                    <img src="{{ vich_uploader_asset(user, 'imageFile') }}" class="avProfilP">
+                                {% else %}
+                                    <img src="/images/avatarVide.jpg" class="avProfilP">
+                                {% endif %}<br>
+                                <span class="psProfilP"><strong>{{user.pseudo}}</strong> 
+                                {% if is_granted('ROLE_MODERATEUR') %}
+                                    </br><a href="" onClick="event.preventDefault()" class="badge badge-pill badge-danger"><i class="fas fa-ban" id="banButton" data-slug="{{user.slug}}"></i></a>
+                                {% endif %}
+                            </td>
+                            <td width=25% class="text-center"><i>Inscrit le <strong>{{user.findDay(user.dateCrea)}}</strong></i></td>
+                            <td rowspan=2 style="vertical-align : middle;text-align:center;"><strong>{{totDemandes}}</strong> ami(s) <br><br>
+                                {% if app.user %}
+                                    {% if user.slug != app.user.slug %} 
+                                        <a href="{{ path ('newConversations', {'slug' : user.slug}) }}"><i class="far fa-envelope fa-3x"></i></a> 
+                                        {% set trouveAmi = 0 %}
+                                            {% for checkAmi in checkAmis %}
+                                                {% if (checkAmi.userAjout.slug == user.slug) or (checkAmi.userRec.slug == user.slug) %}
+                                                        <i class="fas fa-check fa-3x" style="margin-left: 50px"></i>
+                                                        {% set trouveAmi = 1 %}
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% if trouveAmi == 0 %}
+                                                <a href="" onClick="event.preventDefault()"><i class="fas fa-user-plus fa-3x" style="margin-left: 50px" id="addButton" data-slug="{{user.slug}}"></i> </a>
+                                            {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                            <td class="text-center"><strong>{{total}}</strong> messages</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center"><i>Club:</i><br>{% if user.clubs %}<img src="{{user.clubs.logo}}" class="logProfilP" alt="Logo"> <strong>{{user.clubs.navbar}}</strong>
+                            {% else %}<i class="fas fa-times"></i> <strong><span style="background-color:azure;">Aucun</span></strong>{% endif %}</td>
+                         
+                            <td class="text-center"><i>Pays:</i><br>{% if user.payss %}<img src="https://www.countryflags.io/{{user.payss.alpha2}}/flat/32.png"> <strong>{{user.payss.nomFr}}</strong>
+                            {% else %}<i class="fas fa-times"></i> <strong><span style="background-color:azure;">Aucun</span></strong>{% endif %}</td>
+                        </tr>
+                        <tr>
+                            <td colspan=4>{{user.presentation}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-6">
+                    <table class="table" border=1>
+                        <thead>
+                            <tr>
+                                <th colspan=4 class="text-center">Historique Sujets</th>
+                            </tr>
+                        </thead>
+                    </table>
+                <div style="height:400px;overflow:auto;">
+                    <table class="table">
+                        <tbody>
+                            {% if sujets %}
+                            {% set col = 0 %}
+                            {% for sujet in sujets %}
+                                {% if sujet.championnats %}
+                                    {% if sujet.clubs is not null %}
+                                        <tr {% if  col  is divisible by(2) %}style="background-color: azure"{% endif %}>
+                                            <td class="text-center"><img src="{{sujet.clubs.logo}}" class="logoNav" alt="Logo"></td>
+                                            <td width=20% class="text-center">{{ sujet.clubs.navbar }}</td>
+                                            <td><a href="{{ path ('sujet_club_page', {'slugCh' : sujet.championnats.slug, 'slugCl' : sujet.clubs.slug, 'slugSuj' : sujet.slug}) }}">
+                                                    <strong>{{ sujet.titre }}</strong></a>
+                                            </td>
+                                            <td><i>{{sujet.findDay(sujet.sujetDate)}}</i></td>
+                                        </tr>
+                                    {% else %}
+                                        <tr {% if  col  is divisible by(2) %}style="background-color: azure"{% endif %}>
+                                            <td class="text-center"><img src="https://www.countryflags.io/{{sujet.championnats.payss.alpha2}}/flat/24.png"></td>
+                                            <td width=20% class="text-center">{{ sujet.championnats.nom }}</td>
+                                            <td><a href="{{ path ('sujet_champ_page', {'slugCh' : sujet.championnats.slug, 'slugSuj' : sujet.slug}) }}"><strong>{{ sujet.titre }}</strong></a></td>
+                                            <td><i>{{sujet.findDay(sujet.sujetDate)}}</i></td>
+                                        </tr>
+                                    {% endif %}
+                                    {% set col = col + 1 %}
+                                {% endif %}
+                            {% endfor %}
+                            {% else %}
+                            <tr>
+                                <td class="text-center"><h3 style="color:red">Aucun sujet posté.</h3></td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-6">
+                    <table class="table" border=1>
+                        <thead>
+                            <tr>
+                                <th colspan=2 class="text-center">Historique Réponses</th>
+                            </tr>
+                        </thead>
+                    </table>
+                <div style="height:400px;overflow:auto;">
+                    <table class="table">
+                        <tbody>
+                            {% if reponses %}
+                            {% set col = 0 %}
+                            {% for reponse in reponses %}
+                                {% if reponse.sujets.championnats %}
+                                    {% if reponse.sujets.clubs is not null %}
+                                        <tr {% if  col  is divisible by(2) %}style="background-color: azure"{% endif %}>
+                                            <td><strong>A répondu à:</strong> <a href="{{ path ('sujet_club_page', {'slugCh' : reponse.sujets.championnats.slug, 'slugCl' : reponse.sujets.clubs.slug, 'slugSuj' : reponse.sujets.slug}) }}">
+                                                <i>"{{ reponse.sujets.titre }}"</i></a>
+                                            </td>
+                                            <td><i>{{reponse.findDay(reponse.repDate)}}</i></td>
+                                        </tr>
+                                    {% else %}
+                                        <tr {% if  col  is divisible by(2) %}style="background-color: azure"{% endif %}>
+                                            <td><strong>A répondu à:</strong> <a href="{{ path ('sujet_champ_page', {'slugCh' : reponse.sujets.championnats.slug, 'slugSuj' : reponse.sujets.slug}) }}">
+                                                <i>"{{ reponse.sujets.titre }}"</i></a>
+                                            </td>
+                                            <td><i>{{reponse.findDay(reponse.repDate)}}</i></td>
+                                        </tr>
+                                    {% endif %}
+                                    {% set col = col + 1 %}
+                                {% endif %}
+                            {% endfor %}
+                            {% else %}
+                            <tr>
+                                <td class="text-center"><h3 style="color:red">Aucune réponse postée.</h3></td>
+                            </tr>
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{# Jquery #}
+{% block javascripts %}
+    <script>
+        $(document).ready(function(){
+            $("#addButton").click(function(event){
+                $.post("/amis", {userId:event.target.dataset.slug}, function(data){
+                if(data)
+                {
+                    $("#addButton").attr("class", "fas fa-check fa-3x")
+                    $("#addButton").unbind()
+                }
+                })
+            })
+            $("#banButton").click(function(event){
+                $.post("/moderateur/ban", {userId:event.target.dataset.slug}, function(data){
+                if(data)
+                {
+                    $("#banButton").attr("class", "fas fa-times")
+                    $("#banButton").text(" Utilisateur banni")
+                    $("#banButton").unbind()
+                }
+                })
+            })
+        })
+    </script>
+{% endblock %}

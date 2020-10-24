@@ -1,0 +1,45 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Administration des Pays !{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-10">
+            <h1 class="my-5">Gestion des pays</h1>
+        </div>
+        <div class="col">
+            <a href="{{ path('admin_pays_create')}}" class="btn btn-primary my-5">Ajouter un Pays</a>
+        </div>
+    </div>
+    
+    <table class="table table-over">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Drapeau</th>
+                <th>Nom</th>
+                <th class="text-center">Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for pays in payss %}
+            <tr>
+                <td><span class="badge badge-primary rounded">{{pays.id}}</span></td>
+                <td><img src="https://www.countryflags.io/{{pays.alpha2}}/flat/32.png"></td>
+                <td>{{pays.nomFr}}</td>
+                <td class="text-center">
+                    <a href="{{ path('admin_pays_edit', {'id': pays.id})}}" class="badge badge-pill badge-primary"><i class="fas fa-edit"></i></a>
+                    <a href="{{ path('admin_pays_delete', {'id': pays.id})}}" onclick="return confirm('Voulez-vous supprimer le pays {{pays.nomFr}} ?')" class="badge badge-pill badge-danger"><i class="fas fa-trash"></i></a>
+                </td> 
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        {{ knp_pagination_render(payss) }}
+    </div>
+</div>
+{% endblock %}
